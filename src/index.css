@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+body {
+  font-family: 'Diphylleia';
+}
+
+/* font */
+@font-face {
+  font-family: 'BagelFatOne';
+  src: url('./assets/fonts/BagelFatOne-Regular.ttf');
+}
+@font-face {
+  font-family: 'Diphylleia';
+  src: url('./assets/fonts/Diphylleia-Regular.ttf');
+}
+@font-face {
+  font-family: 'GasoekOne';
+  src: url('./assets/fonts/GasoekOne-Regular.ttf');
+}
