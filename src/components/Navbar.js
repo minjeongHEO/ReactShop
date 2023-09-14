@@ -1,10 +1,25 @@
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 const MainNav = () => {
+  let navigate = useNavigate(); //이 Hook을 사용하려면 라우터 컴포넌트 내에서만 호출해야 합니다.
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">🎂쪼꼬보이 편집숍 👜</Navbar.Brand>
+        {/* <Navbar.Brand href="#home">🎂쪼꼬보이 편집숍 👜</Navbar.Brand> */}
+
+        {/* <Navbar.Brand> */}
+        {/* <Link to="/">🎂쪼꼬보이 편집숍 👜</Link> */}
+        {/* </Navbar.Brand> */}
+
+        <Navbar.Brand
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          🎂쪼꼬보이 편집숍 👜
+        </Navbar.Brand>
+
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">

@@ -11,28 +11,59 @@ import { useState } from 'react';
 
 import MainNav from './components/Navbar.js';
 import MainContainer from './components/MainContainer.js';
+import DetailPage from './components/page/DetailPage.js';
 
 import data from './data.js';
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 
 function App() {
   let [shoes] = useState(data);
+  // console.log(data);
   return (
     <>
+      {/* Route == page */}
       <MainNav />
 
-      <Swiper className="main-bg" spaceBetween={10} slidesPerView={1} onSlideChange={() => console.log('slide change')} onSwiper={(swiper) => console.log(swiper)}>
-        <SwiperSlide>
-          <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg1})` }}></div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg2})` }}></div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg3})` }}></div>
-        </SwiperSlide>
-      </Swiper>
+      {/* <Link to="/detail">상세페이지</Link> */}
 
-      <MainContainer shoes={shoes} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Swiper className="main-bg" spaceBetween={10} slidesPerView={1} onSlideChange={() => console.log('slide change')} onSwiper={(swiper) => console.log(swiper)}>
+                <SwiperSlide>
+                  <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg1})` }}></div>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg2})` }}></div>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg3})` }}></div>
+                </SwiperSlide>
+              </Swiper>
+              <MainContainer shoes={shoes} />
+            </>
+          }
+        />
+        <Route path="/deta" element={<DetailPage shoes={shoes} />} />
+        {/* 404페이지 */}
+        {/* <Route path="*" element={<div>없는 페이지 입니다.</div>} /> */}
+        <Route
+          path="/event"
+          element={
+            <>
+              <h2>오늘의 이벤트</h2>
+              <Outlet></Outlet>
+            </>
+          }
+        >
+          <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>} />
+          <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
+        </Route>
+        {/* <Route path="/detail/:id" element={<DetailPage shoes={shoes} />} /> */}
+        <Route path="/detail/:id" element={<DetailPage data={data} />} />
+      </Routes>
     </>
   );
 }
