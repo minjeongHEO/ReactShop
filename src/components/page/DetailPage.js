@@ -8,9 +8,10 @@ let ColorBtn = styled.button`
   padding: 10px;
 `;
 //기존 스타일 복사하기
-let newColorBtn = styled.button(ColorBtn)`
-  padding: 30px;
+let NewColorBtn = styled(ColorBtn)`
+  background: red;
 `;
+
 let BlackBox = styled.div`
   background: grey;
   padding: 20px;
@@ -24,7 +25,7 @@ const DetailPage = (props) => {
   return (
     <div className="container">
       <BlackBox>
-        <ColorBtn bg="pink">버튼</ColorBtn>
+        <NewColorBtn bg="pink">버튼</NewColorBtn>
       </BlackBox>
       <div className="row">
         <div className="col-md-6">
