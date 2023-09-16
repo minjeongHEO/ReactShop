@@ -1,0 +1,13 @@
+.fadeOut {
+  transition: opacity 1s ease-out;
+  opacity: 0;
+  /* background-color: black; */
+}
+/* 
+linear: 애니메이션이 시작부터 끝까지 동일한 속도로 진행됩니다.
+ease: 애니메이션이 천천히 시작되고, 그 후 빨라지다가 마지막에 다시 천천히 끝납니다. 
+      이는 자연스러운 움직임을 표현하기 위해 일반적으로 사용됩니다.
+ease-in: 애니메이션이 천천히 시작됩니다.
+ease-out: 애니메이션이 천천히 끝납니다.
+ease-in-out: 애니메이션이 천천히 시작되고, 그 후 빨라지다가 마지막에 다시 천천히 끝납니다. 
+*/
