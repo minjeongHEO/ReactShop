@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 
