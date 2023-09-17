@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import styles from './DetailPage.module.css';
 import { cleanup } from '@testing-library/react';
+import { Nav, Tab } from 'react-bootstrap';
+import { tab } from '@testing-library/user-event/dist/tab';
 
 let ColorBtn = styled.button`
   background: ${(props) => props.bg};
@@ -23,37 +25,25 @@ let BlackBox = styled.div`
 const DetailPage = (props) => {
   let { id } = useParams(); //*1
   let filteredData = props.data.filter((item) => item.id === parseInt(id));
-
   const [isVisible, setIsVisible] = useState(true);
   let [inputData, setInputData] = useState('');
   // const [showTooltip, setShowTooltip] = useState(false); //alert 대신 툴팁으로 변경해보자;
+  let [tab, setTab] = useState(0);
 
   /** 2초 팝업 */
   useEffect(() => {
     let timer = setTimeout(() => {
       setIsVisible(false);
     }, 2000);
-
-    //useEffect동작 전에 실행되는 return()=>{}
+    // *4
     return () => {
-      clearTimeout(timer);
-      //기존코드 치우는 함수(ex.기존 타이머는 제거해주세요)
-      //참고. clean up function은 mount시 실행X, unmount(컴포넌트삭제)시 실행O
+      clearTimeout(timer); // *5
     };
-  }, [isVisible]); //isVisible변수가 변할 때만 실행됨 (처음 페이지 마운트 될 때는 물론 실행됨)
-  // }, []); : 컴포넌트 마운트되고 1회만 실행시키고 싶으면 이렇게 빈값넣으면 됨
-
-  /** input태그 숫자 값 확인 */
-  // useEffect(() => {
-  //   if (!/^\d*$/.test(inputData)) {
-  //     alert('숫자만 입력하세요!');
-  //     setInputData('');
-  //   }
-  // }, [inputData]);
+  }, [isVisible]); // *6
 
   const numberCheck = (e) => {
     let value = e.target.value;
-    //*2
+    // *2
     if (!/^\d*$/.test(value)) {
       // 숫자가 아니라면
       alert('숫자만 입력하세요!');
@@ -65,10 +55,13 @@ const DetailPage = (props) => {
       // setShowTooltip(false); // 숫자일 경우 툴팁을 숨김
       setInputData(value); // 숫자라면 inputData 상태 업데이트
     }
-    console.log(value);
   };
 
-  console.log(filteredData);
+  const tabSwitch = (e) => {
+    let value = e.target.getAttribute('datatype');
+    setTab(value);
+  };
+
   return (
     <div className="container">
       {/* <BlackBox>
@@ -90,9 +83,44 @@ const DetailPage = (props) => {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+
+      <Nav variant="tabs" defaultActiveKey="link0">
+        <Nav.Item>
+          <Nav.Link eventKey="link0" datatype="0" onClick={tabSwitch}>
+            버튼0
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link1" datatype="1" onClick={tabSwitch}>
+            버튼1
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link2" datatype="2" onClick={tabSwitch}>
+            버튼2
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <TabContent tab={tab} />
     </div>
   );
 };
+
+// function TabContent(props) {
+function TabContent({ tab }) {
+  // if (props.tab == 0) {
+  if (tab == 0) {
+    return <div>내용0</div>; //컴포넌트는 return반드시 넣어야함
+  } else if (tab == 1) {
+    return <div>내용1</div>;
+  } else if (tab == 2) {
+    return <div>내용2</div>;
+  }
+}
+
+// function TabContent({ tab }) {
+//   return [<div>내용{tab}</div>, <div>내용1</div>, <div>내용2</div>][tab];
+// }
 
 export default DetailPage;
 /*
@@ -125,4 +153,9 @@ export default DetailPage;
                         따라서 `onKeyDown`에서 키 코드에 의존하는 로직을 작성하면 예상치 못한 동작이 발생할 수 있습니다.
 
   따라서 React에서 `<input>` 태그의 값을 제한하거나 검증하기 위해서는 주로 `onChange`, 그리고 필요에 따라 HTML5 유효성 검사 기능 등과 같은 다른 기능들과 함께 활용하는 것이 좋습니다.
+4). useEffect동작 전에 실행되는 return()=>{}
+5). 기존코드 치우는 함수(ex.기존 타이머는 제거해주세요 = clearTimeout())
+      참고: clean up function은 mount시 실행X, unmount(컴포넌트삭제)시 실행O
+6). isVisible변수가 변할 때만 실행됨 (처음 페이지 마운트 될 때는 물론 실행됨)
+     }, []); : 컴포넌트 마운트되고 1회만 실행시키고 싶으면 이렇게 빈값넣으면 됨
 */
