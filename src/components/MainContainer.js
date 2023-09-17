@@ -12,7 +12,8 @@ const MainContainer = (props) => {
         {props.shoes.map((data) => (
           <Col>
             <Link to={`/detail/${data.id}`}>
-              <img src={data.img} width="80%" />
+              {/* <img src={data.img} width="80%" /> */}
+              <img src={`https://codingapple1.github.io/shop/shoes${data.id + 1}.jpg`} width="80%" />
               <h4>{data.title}</h4>
               <p>{data.price}</p>
             </Link>

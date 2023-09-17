@@ -12,13 +12,17 @@ import { useState } from 'react';
 import MainNav from './components/Navbar.js';
 import MainContainer from './components/MainContainer.js';
 import DetailPage from './components/page/DetailPage.js';
+import axios from 'axios';
 
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 
 function App() {
-  let [shoes] = useState(data);
-  // console.log(data);
+  let [shoes, setShoes] = useState(data);
+  let [click, setClick] = useState(2);
+  const noVisible = {
+    visibility: 'none',
+  };
   return (
     <>
       {/* Route == page */}
@@ -43,12 +47,35 @@ function App() {
                 </SwiperSlide>
               </Swiper>
               <MainContainer shoes={shoes} />
+              <button
+                style={click > 3 ? noVisible : {}}
+                onClick={() => {
+                  setClick(click + 1);
+                  if (click > 3) {
+                    return false;
+                  }
+                  console.log(`https://codingapple1.github.io/shop/data${click}.json`);
+                  axios
+                    .get(`https://codingapple1.github.io/shop/data${click}.json`)
+                    .then((res) => {
+                      let addCopy = [...shoes, ...res.data];
+                      setShoes(addCopy);
+                    })
+                    .catch((e) => {
+                      console.error(e);
+                    });
+                }}
+              >
+                더보기
+              </button>
             </>
           }
         />
+
         <Route path="/deta" element={<DetailPage shoes={shoes} />} />
         {/* 404페이지 */}
         {/* <Route path="*" element={<div>없는 페이지 입니다.</div>} /> */}
+
         <Route
           path="/event"
           element={
@@ -61,8 +88,8 @@ function App() {
           <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>} />
           <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
         </Route>
-        {/* <Route path="/detail/:id" element={<DetailPage shoes={shoes} />} /> */}
-        <Route path="/detail/:id" element={<DetailPage data={data} />} />
+
+        <Route path="/detail/:id" element={<DetailPage data={shoes} />} />
       </Routes>
     </>
   );

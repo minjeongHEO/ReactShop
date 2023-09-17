@@ -21,8 +21,7 @@ let BlackBox = styled.div`
 `;
 
 const DetailPage = (props) => {
-  let { id } = useParams(); // 구조 분해 할당 (let id  = useParams().id;) //파라미터로 받은 값
-  // const selectedData = data.find((item) => item.id === parseInt(id));
+  let { id } = useParams(); //*1
   let filteredData = props.data.filter((item) => item.id === parseInt(id));
 
   const [isVisible, setIsVisible] = useState(true);
@@ -54,7 +53,7 @@ const DetailPage = (props) => {
     let value = e.target.value;
     // setInputData(value);
     if (!/^\d*$/.test(value)) {
-      // 숫자가 아니라면
+      // 숫자`가 아니라면
       alert('숫자만 입력하세요!');
       value = value.replace(/\D/g, '');
       setInputData(value); // 여기에 해당 input에 value를 ''로 바꿔줍니다.
@@ -64,6 +63,7 @@ const DetailPage = (props) => {
     console.log(value);
   };
 
+  console.log(filteredData);
   return (
     <div className="container">
       {/* <BlackBox>
@@ -72,7 +72,8 @@ const DetailPage = (props) => {
       <div className={`alert alert-warning ${isVisible ? '' : styles.fadeOut}`}>2초 이내 구매 시 할인</div>
       <div className="row">
         <div className="col-md-6">
-          <img src={filteredData[0].img} width="100%" alt="" />
+          {/* <img src={filteredData[0].img} width="100%" alt="" /> */}
+          <img src={`https://codingapple1.github.io/shop/shoes${filteredData[0].id + 1}.jpg`} width="100%" alt="" />
         </div>
         <div className="col-md-6">
           <input className="numberInput" value={inputData} onChange={numberCheck} placeholder="숫자만 입력하세요."></input>
@@ -88,6 +89,8 @@ const DetailPage = (props) => {
 
 export default DetailPage;
 /*
+1. 구조 분해 할당 (let id  = useParams().id;) //파라미터로 받은 값
+  const selectedData = data.find((item) => item.id === parseInt(id));
 - 정규 표현식 유효성 검사
   ^는 문자열의 시작을 의미합니다.
   \d는 모든 숫자를 의미합니다. 이는 [0-9]와 동일합니다.
