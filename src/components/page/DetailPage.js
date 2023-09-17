@@ -26,6 +26,8 @@ const DetailPage = (props) => {
 
   const [isVisible, setIsVisible] = useState(true);
   let [inputData, setInputData] = useState('');
+  // const [showTooltip, setShowTooltip] = useState(false); //alert 대신 툴팁으로 변경해보자;
+
   /** 2초 팝업 */
   useEffect(() => {
     let timer = setTimeout(() => {
@@ -51,13 +53,16 @@ const DetailPage = (props) => {
 
   const numberCheck = (e) => {
     let value = e.target.value;
-    // setInputData(value);
+    //*2
     if (!/^\d*$/.test(value)) {
-      // 숫자`가 아니라면
+      // 숫자가 아니라면
       alert('숫자만 입력하세요!');
+      //alert 대신 툴팁으로 변경해보자;
+      // setShowTooltip(true); // 툴팁을 표시
       value = value.replace(/\D/g, '');
       setInputData(value); // 여기에 해당 input에 value를 ''로 바꿔줍니다.
     } else {
+      // setShowTooltip(false); // 숫자일 경우 툴팁을 숨김
       setInputData(value); // 숫자라면 inputData 상태 업데이트
     }
     console.log(value);
@@ -76,7 +81,9 @@ const DetailPage = (props) => {
           <img src={`https://codingapple1.github.io/shop/shoes${filteredData[0].id + 1}.jpg`} width="100%" alt="" />
         </div>
         <div className="col-md-6">
+          {/* //3. */}
           <input className="numberInput" value={inputData} onChange={numberCheck} placeholder="숫자만 입력하세요."></input>
+          {/* {showTooltip && <div className="tooltip">숫자만 입력하세요!</div>} */}
           <h4 className="pt-5">{filteredData[0].title}</h4>
           <p>{filteredData[0].content}</p>
           <p>{filteredData[0].price}원</p>
@@ -89,23 +96,33 @@ const DetailPage = (props) => {
 
 export default DetailPage;
 /*
-1. 구조 분해 할당 (let id  = useParams().id;) //파라미터로 받은 값
+1). 구조 분해 할당 (let id  = useParams().id;) //파라미터로 받은 값
   const selectedData = data.find((item) => item.id === parseInt(id));
-- 정규 표현식 유효성 검사
+  ----------------------------------------------------------------------------------------
+2). 정규 표현식 유효성 검사
   ^는 문자열의 시작을 의미합니다.
   \d는 모든 숫자를 의미합니다. 이는 [0-9]와 동일합니다.
   *는 앞의 요소가 0번 이상 반복될 수 있음을 의미합니다.
   $는 문자열의 끝을 의미합니다.
   \D는 정규 표현식에서 숫자가 아닌 모든 문자를 의미하며,
   /g는 전역 플래그(global flag)로, 문자열 전체에서 해당 패턴을 찾아라는 의미입니다.
-- onChange와 onKeyUp의 차이
+  ----------------------------------------------------------------------------------------
+3). onKeyDown과 onChange
   onChange와 onKeyUp은 둘 다 JavaScript에서 제공하는 이벤트 핸들러입니다. 둘 다 사용자의 입력에 반응하지만, 발생하는 시점과 처리하는 방식에 차이가 있습니다.
   * onChange: 이 이벤트는 사용자가 입력 필드의 값을 변경하고 포커스를 다른 곳으로 옮길 때 발생합니다. 즉, 사용자가 입력을 완료하고 해당 필드에서 벗어날 때마다 실행됩니다.
                ***React에서는 조금 다르게 동작하여, 사용자가 입력할 때마다 바로바로 발생합니다.
   * onKeyUp: 이 이벤트는 키보드의 키를 눌렀다가 뗐을 때 발생합니다. 따라서, 각각의 키입력에 대해 실시간으로 반응하며, 모든 키에 대해 반응한다는 점에서 onChange와 차이를 보입니다.
   두 이벤트 핸들러 중 어느 것을 사용할지는 상황과 요구 사항에 따라 달라집니다.
+  `onKeyDown` 이벤트는 사용자가 키를 누르는 순간 발생하는 이벤트입니다. 숫자만 입력하도록 제한하는 것도 가능하지만, 
+  일반적으로 `onChange` 이벤트를 사용하는 것이 더 적합합니다.
 
-  실시간으로 모든 키입력을 추적하거나 특정 키입력(예: Enter키)에 반응해야 하는 경우 onKeyUp이 적합할 수 있습니다.
-  입력 값의 유효성 검사나 형식화 등을 수행하려면 보통 onChange를 사용합니다.
-  그러나 앞서 설명한대로 React에서는 onChange도 실시간으로 작동하기 때문에 일반적인 유효성 검사나 실시간 업데이트 등의 목적으로 주로 사용됩니다
+  그 이유는 다음과 같습니다:
+  1. **입력 검증**: `onChange`는 입력 값이 변경될 때마다 호출되므로, 입력 값의 유효성을 실시간으로 확인하고 반영할 수 있습니다. 
+                    반면에 `onKeyDown`은 키 입력이 발생했을 때만 호출되므로, 다른 방식(예: 마우스로 붙여넣기)으로 변경된 값을 감지할 수 없습니다.
+  2. **사용자 경험**: `onKeyDown`을 사용하여 특정 문자의 입력을 막으면, 해당 문자를 타이핑하려고 할 때 아무런 반응이 없어서 사용자가 혼란스러워할 수 있습니다. 
+                      반면에 `onChange`를 사용하면, 잘못된 문자가 입력되었음을 바로 알려주거나 자동으로 수정해줄 수 있어서 더 나은 사용자 경험을 제공합니다.
+  3. **브라우저 호환성**: 일부 오래된 브라우저에서는 특정 키 코드(예: 숫자 패드의 숫자)를 정확히 인식하지 못하는 경우가 있습니다. 
+                        따라서 `onKeyDown`에서 키 코드에 의존하는 로직을 작성하면 예상치 못한 동작이 발생할 수 있습니다.
+
+  따라서 React에서 `<input>` 태그의 값을 제한하거나 검증하기 위해서는 주로 `onChange`, 그리고 필요에 따라 HTML5 유효성 검사 기능 등과 같은 다른 기능들과 함께 활용하는 것이 좋습니다.
 */

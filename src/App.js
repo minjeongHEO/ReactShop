@@ -7,7 +7,7 @@ import 'swiper/css';
 import mainImg1 from './assets/images/main1.jpg';
 import mainImg2 from './assets/images/main2.jpg';
 import mainImg3 from './assets/images/main3.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import MainNav from './components/Navbar.js';
 import MainContainer from './components/MainContainer.js';
@@ -20,9 +20,12 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 function App() {
   let [shoes, setShoes] = useState(data);
   let [click, setClick] = useState(2);
+  const [loading, setLoading] = useState(2);
+
   const noVisible = {
-    visibility: 'none',
+    visibility: 'hidden',
   };
+
   return (
     <>
       {/* Route == page */}
@@ -47,6 +50,7 @@ function App() {
                 </SwiperSlide>
               </Swiper>
               <MainContainer shoes={shoes} />
+
               <button
                 style={click > 3 ? noVisible : {}}
                 onClick={() => {
@@ -54,7 +58,6 @@ function App() {
                   if (click > 3) {
                     return false;
                   }
-                  console.log(`https://codingapple1.github.io/shop/data${click}.json`);
                   axios
                     .get(`https://codingapple1.github.io/shop/data${click}.json`)
                     .then((res) => {
