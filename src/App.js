@@ -3,6 +3,7 @@ import './App.css';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import Loading from './components/Loading';
 
 import mainImg1 from './assets/images/main1.jpg';
 import mainImg2 from './assets/images/main2.jpg';
@@ -20,7 +21,7 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 function App() {
   let [shoes, setShoes] = useState(data);
   let [click, setClick] = useState(2);
-  const [loading, setLoading] = useState(2);
+  const [loading, setLoading] = useState(false);
 
   const noVisible = {
     visibility: 'hidden',
@@ -49,11 +50,14 @@ function App() {
                   <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg3})` }}></div>
                 </SwiperSlide>
               </Swiper>
+
+              {loading ? <Loading /> : null}
               <MainContainer shoes={shoes} />
 
               <button
                 style={click > 3 ? noVisible : {}}
                 onClick={() => {
+                  setLoading(true);
                   setClick(click + 1);
                   if (click > 3) {
                     return false;
@@ -63,9 +67,11 @@ function App() {
                     .then((res) => {
                       let addCopy = [...shoes, ...res.data];
                       setShoes(addCopy);
+                      setLoading(false);
                     })
                     .catch((e) => {
                       console.error(e);
+                      setLoading(false);
                     });
                 }}
               >
