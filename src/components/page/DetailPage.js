@@ -79,7 +79,7 @@ const DetailPage = (props) => {
           {/* {showTooltip && <div className="tooltip">숫자만 입력하세요!</div>} */}
           <h4 className="pt-5">{filteredData[0].title}</h4>
           <p>{filteredData[0].content}</p>
-          <p>{filteredData[0].price}원</p>
+          <p>{filteredData[0].price.toLocaleString()}원</p>
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>

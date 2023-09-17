@@ -15,7 +15,7 @@ const MainContainer = (props) => {
               {/* <img src={data.img} width="80%" /> */}
               <img src={`https://codingapple1.github.io/shop/shoes${data.id + 1}.jpg`} width="80%" />
               <h4>{data.title}</h4>
-              <p>{data.price}</p>
+              <p>{data.price.toLocaleString()}</p>
             </Link>
           </Col>
         ))}
