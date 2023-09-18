@@ -1,6 +1,14 @@
+/* eslint-disable */
 import { Table } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 
-function CartPage(params) {
+function CartPage() {
+  //store에 있던 Redux state를 가져와줌
+  let reduxState = useSelector((state) => {
+    return state;
+  });
+  console.log(reduxState);
+
   return (
     <div>
       <Table>
