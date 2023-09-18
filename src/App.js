@@ -1,10 +1,12 @@
 /* eslint-disable */
-import './App.css';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
 import Loading from './components/Loading';
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import './App.css';
+import 'swiper/css';
 
+import data from './data.js';
 import mainImg1 from './assets/images/main1.jpg';
 import mainImg2 from './assets/images/main2.jpg';
 import mainImg3 from './assets/images/main3.jpg';
@@ -14,9 +16,7 @@ import MainNav from './components/Navbar.js';
 import MainContainer from './components/MainContainer.js';
 import DetailPage from './components/page/DetailPage.js';
 import axios from 'axios';
-
-import data from './data.js';
-import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import CartPage from './components/page/CartPage.js';
 
 export let context1 = createContext(); //context를 만들어줌 = state보관함
 
@@ -108,6 +108,8 @@ function App() {
             </context1.Provider>
           }
         />
+
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </>
   );
