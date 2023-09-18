@@ -8,7 +8,7 @@ import Loading from './components/Loading';
 import mainImg1 from './assets/images/main1.jpg';
 import mainImg2 from './assets/images/main2.jpg';
 import mainImg3 from './assets/images/main3.jpg';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 import MainNav from './components/Navbar.js';
 import MainContainer from './components/MainContainer.js';
@@ -17,6 +17,8 @@ import axios from 'axios';
 
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+
+export let context1 = createContext(); //context를 만들어줌 = state보관함
 
 function App() {
   let [shoes, setShoes] = useState(data);
@@ -98,7 +100,14 @@ function App() {
           <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
         </Route>
 
-        <Route path="/detail/:id" element={<DetailPage data={shoes} />} />
+        <Route
+          path="/detail/:id"
+          element={
+            <context1.Provider value={{ shoes, click }}>
+              <DetailPage data={shoes} />
+            </context1.Provider>
+          }
+        />
       </Routes>
     </>
   );

@@ -1,11 +1,13 @@
 /* eslint-disable */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import styles from './DetailPage.module.css';
 import { cleanup } from '@testing-library/react';
 import { Nav, Tab } from 'react-bootstrap';
 import { tab } from '@testing-library/user-event/dist/tab';
+
+import { context1 } from '../../App.js';
 
 let ColorBtn = styled.button`
   background: ${(props) => props.bg};
@@ -23,18 +25,28 @@ let BlackBox = styled.div`
 `;
 
 const DetailPage = (props) => {
+  //보관함(context) 해체해주는 함수
+  let { shoes } = useContext(context1); //destructuring(구조분해할당)문법
+
   let { id } = useParams(); //*1
   let filteredData = props.data.filter((item) => item.id === parseInt(id));
   const [isVisible, setIsVisible] = useState(true);
   let [inputData, setInputData] = useState('');
   // const [showTooltip, setShowTooltip] = useState(false); //alert 대신 툴팁으로 변경해보자;
   let [tab, setTab] = useState(0);
+  let [load, setLoad] = useState('');
 
   /** 2초 팝업 */
   useEffect(() => {
     let timer = setTimeout(() => {
       setIsVisible(false);
+      setLoad('end');
+    }, 3000);
+
+    setTimeout(() => {
+      setLoad('end');
     }, 2000);
+
     // *4
     return () => {
       clearTimeout(timer); // *5
@@ -67,7 +79,9 @@ const DetailPage = (props) => {
       {/* <BlackBox>
         <NewColorBtn bg="pink">버튼</NewColorBtn>
       </BlackBox> */}
-      <div className={`alert alert-warning ${isVisible ? '' : styles.fadeOut}`}>2초 이내 구매 시 할인</div>
+      <div className={``}>
+        <div className={`alert alert-warning ${isVisible ? '' : styles.fadeOut}`}>2초 이내 구매 시 할인</div>
+      </div>
       <div className="row">
         <div className="col-md-6">
           {/* <img src={filteredData[0].img} width="100%" alt="" /> */}
@@ -83,7 +97,6 @@ const DetailPage = (props) => {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
-
       <Nav variant="tabs" defaultActiveKey="link0">
         <Nav.Item>
           <Nav.Link eventKey="link0" datatype="0" onClick={tabSwitch}>
@@ -102,25 +115,51 @@ const DetailPage = (props) => {
         </Nav.Item>
       </Nav>
       <TabContent tab={tab} />
+      <h1>{shoes[0].title}</h1> //이렇게 props없이도 state사용 가능하다.
     </div>
   );
 };
 
-// function TabContent(props) {
-function TabContent({ tab }) {
-  // if (props.tab == 0) {
-  if (tab == 0) {
-    return <div>내용0</div>; //컴포넌트는 return반드시 넣어야함
-  } else if (tab == 1) {
-    return <div>내용1</div>;
-  } else if (tab == 2) {
-    return <div>내용2</div>;
-  }
-}
-
+// // function TabContent(props) {
 // function TabContent({ tab }) {
-//   return [<div>내용{tab}</div>, <div>내용1</div>, <div>내용2</div>][tab];
+//   // if (props.tab == 0) {
+//   if (tab == 0) {
+//     return <div>내용0</div>; //컴포넌트는 return반드시 넣어야함
+//   } else if (tab == 1) {
+//     return <div>내용1</div>;
+//   } else if (tab == 2) {
+//     return <div>내용2</div>;
+//   }
 // }
+
+function TabContent({ tab }) {
+  let { shoes } = useContext(context1);
+  let [fade, setFade] = useState('');
+
+  useEffect(() => {
+    //*7
+    setTimeout(() => {
+      setFade('end');
+    }, 200);
+    //*8
+    return () => {
+      setFade('');
+    };
+  }, [tab]);
+  return (
+    <div className={``}>
+      {
+        [
+          <div>
+            <h1>{shoes[tab].content}</h1>
+          </div>,
+          <div>내용1</div>,
+          <div>내용2</div>,
+        ][tab]
+      }
+    </div>
+  );
+}
 
 export default DetailPage;
 /*
@@ -153,9 +192,18 @@ export default DetailPage;
                         따라서 `onKeyDown`에서 키 코드에 의존하는 로직을 작성하면 예상치 못한 동작이 발생할 수 있습니다.
 
   따라서 React에서 `<input>` 태그의 값을 제한하거나 검증하기 위해서는 주로 `onChange`, 그리고 필요에 따라 HTML5 유효성 검사 기능 등과 같은 다른 기능들과 함께 활용하는 것이 좋습니다.
+----------------------------------------------------------------------------------------
 4). useEffect동작 전에 실행되는 return()=>{}
+
 5). 기존코드 치우는 함수(ex.기존 타이머는 제거해주세요 = clearTimeout())
       참고: clean up function은 mount시 실행X, unmount(컴포넌트삭제)시 실행O
+      
 6). isVisible변수가 변할 때만 실행됨 (처음 페이지 마운트 될 때는 물론 실행됨)
      }, []); : 컴포넌트 마운트되고 1회만 실행시키고 싶으면 이렇게 빈값넣으면 됨
+
+7). 리액트 18버전 이상부터는 automatic batch 라는 기능이 생겼습니다.
+    state 변경함수들이 연달아서 여러개 처리되어야한다면
+    state 변경함수를 다 처리하고 마지막에 한 번만 재렌더링됩니다.
+    그래서 'end' 로 변경하는거랑 ' ' 이걸로 변경하는거랑 약간 시간차를 뒀습니다.
+8). clean up function
 */
