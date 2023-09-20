@@ -1,14 +1,20 @@
-/* eslint-disable */
+// /* eslint-disable */
 import { Table } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 function CartPage() {
   //store에 있던 Redux state를 가져와줌
+  // let reduxState = useSelector((state) => state);
   let reduxState = useSelector((state) => {
     return state;
+    //return state.stock; //이렇게도 사용 가능
   });
-  console.log(reduxState);
 
+  let cartArr = useSelector((state) => {
+    return state.cart;
+  });
+
+  console.log(cartArr);
   return (
     <div>
       <Table>
@@ -21,12 +27,17 @@ function CartPage() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>안녕</td>
-            <td>안녕</td>
-            <td>안녕</td>
-          </tr>
+          {/* 1. */}
+          {cartArr.map((e, i) => (
+            <tr>
+              <td>{i}</td>
+              <td>{e.name}</td>
+              <td>{e.count}</td>
+              <td>
+                <button>변경하기</button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>
@@ -34,3 +45,8 @@ function CartPage() {
 }
 
 export default CartPage;
+/**
+ * 1).jsx안에서 map함수는
+ * {cartArr.map((e, i) => {})}가 아니라,
+ * {cartArr.map((e, i) => ())}로 작성해야 한다.
+ */
