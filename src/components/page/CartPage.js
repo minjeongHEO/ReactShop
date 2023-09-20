@@ -1,9 +1,12 @@
 // /* eslint-disable */
 import { Table } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeName } from '../../store.js';
 
 function CartPage() {
-  //store에 있던 Redux state를 가져와줌
+  //* useDispatch => store.js에 요청을 보내주는 함수
+  let dispatch = useDispatch();
+  //* useSelector => store.js에 있던 Redux state를 가져와줌
   // let reduxState = useSelector((state) => state);
   let reduxState = useSelector((state) => {
     return state;
@@ -14,14 +17,14 @@ function CartPage() {
     return state.cart;
   });
 
-  console.log(cartArr);
   return (
     <div>
+      {reduxState.user}
       <Table>
         <thead>
           <tr>
             <th>#</th>
-            <th>상품명</th>
+            <th>상품명d</th>
             <th>수량</th>
             <th>변경하기</th>
           </tr>
@@ -34,7 +37,8 @@ function CartPage() {
               <td>{e.name}</td>
               <td>{e.count}</td>
               <td>
-                <button>변경하기</button>
+                <button onClick={() => dispatch(changeName())}>변경하기</button>
+                {/* dispatch(state변경함수()) */}
               </td>
             </tr>
           ))}
@@ -49,4 +53,5 @@ export default CartPage;
  * 1).jsx안에서 map함수는
  * {cartArr.map((e, i) => {})}가 아니라,
  * {cartArr.map((e, i) => ())}로 작성해야 한다.
+ * map함수는 return과 중괄호 생략가능
  */
