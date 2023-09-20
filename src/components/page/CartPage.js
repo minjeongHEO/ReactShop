@@ -1,7 +1,7 @@
 // /* eslint-disable */
 import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeName } from '../../store.js';
+import { addAge, changeName } from '../../store/userSlice.js';
 
 function CartPage() {
   //* useDispatch => store.js에 요청을 보내주는 함수
@@ -19,7 +19,16 @@ function CartPage() {
 
   return (
     <div>
-      {reduxState.user}
+      <h6>
+        {reduxState.user.name}({reduxState.user.age})의 장바구니
+        <button
+          onClick={() => {
+            dispatch(addAge(10));
+          }}
+        >
+          나이버튼
+        </button>
+      </h6>
       <Table>
         <thead>
           <tr>
