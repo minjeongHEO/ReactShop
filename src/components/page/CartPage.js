@@ -1,7 +1,8 @@
 // /* eslint-disable */
 import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAge, changeName } from '../../store/userSlice.js';
+import { addAge } from '../../store/userSlice.js';
+import { addCount } from '../../store.js';
 
 function CartPage() {
   //* useDispatch => store.js에 요청을 보내주는 함수
@@ -32,10 +33,10 @@ function CartPage() {
       <Table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>상품명d</th>
+            <th>#NO</th>
+            <th>상품명</th>
             <th>수량</th>
-            <th>변경하기</th>
+            <th>수량 변경</th>
           </tr>
         </thead>
         <tbody>
@@ -46,7 +47,7 @@ function CartPage() {
               <td>{e.name}</td>
               <td>{e.count}</td>
               <td>
-                <button onClick={() => dispatch(changeName())}>변경하기</button>
+                <button onClick={() => dispatch(addCount(e.id))}>+</button>
                 {/* dispatch(state변경함수()) */}
               </td>
             </tr>

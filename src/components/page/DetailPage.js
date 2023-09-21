@@ -8,6 +8,8 @@ import { Nav, Tab } from 'react-bootstrap';
 import { tab } from '@testing-library/user-event/dist/tab';
 
 import { context1 } from '../../App.js';
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../../store.js';
 
 let ColorBtn = styled.button`
   background: ${(props) => props.bg};
@@ -27,6 +29,7 @@ let BlackBox = styled.div`
 const DetailPage = (props) => {
   //보관함(context) 해체해주는 함수
   let { shoes } = useContext(context1); //destructuring(구조분해할당)문법
+  let dispatch = useDispatch();
 
   let { id } = useParams(); //*1
   let filteredData = props.data.filter((item) => item.id === parseInt(id));
@@ -94,7 +97,9 @@ const DetailPage = (props) => {
           <h4 className="pt-5">{filteredData[0].title}</h4>
           <p>{filteredData[0].content}</p>
           <p>{filteredData[0].price.toLocaleString()}원</p>
-          <button className="btn btn-danger">주문하기</button>
+          <button className="btn btn-danger" onClick={() => dispatch(addProduct({ id: filteredData[0].id, name: filteredData[0].title, count: 1 }))}>
+            주문하기
+          </button>
         </div>
       </div>
       <Nav variant="tabs" defaultActiveKey="link0">

@@ -32,16 +32,23 @@ const MainNav = () => {
             <Nav.Link href="#pricing">vintage</Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets">More deets</Nav.Link>
+            <Nav.Link
+              href="#deets"
+              onClick={() => {
+                navigate('/cart');
+              }}
+            >
+              장바구니
+            </Nav.Link>
+
             <NavDropdown title="MyPage 🕶" id="collapsible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">나의 정보</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">주문 내역</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">월간 일지</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">로그아웃</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link eventKey={2} href="#memes">
-              Dank memes
+              Dark Theme🌛
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

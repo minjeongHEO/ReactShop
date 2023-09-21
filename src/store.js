@@ -15,6 +15,19 @@ let cart = createSlice({
     { id: 0, name: 'White and Black', count: 2 },
     { id: 2, name: 'Grey Yordan', count: 1 },
   ],
+  reducers: {
+    addCount(state, action) {
+      state.map((e, i) => {
+        if (e.id == action.payload) {
+          e.count += 1;
+        }
+      });
+    },
+    addProduct(state, action) {
+      return [...state, action.payload];
+      // state.put(action.payload);안됌
+    },
+  },
 });
 /* eslint-enable  */
 
@@ -27,3 +40,5 @@ export default configureStore({
     cart: cart.reducer,
   },
 });
+
+export let { addCount, addProduct } = cart.actions;
