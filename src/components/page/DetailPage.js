@@ -97,7 +97,7 @@ const DetailPage = (props) => {
           <h4 className="pt-5">{filteredData[0].title}</h4>
           <p>{filteredData[0].content}</p>
           <p>{filteredData[0].price.toLocaleString()}원</p>
-          <button className="btn btn-danger" onClick={() => dispatch(addProduct({ id: filteredData[0].id, name: filteredData[0].title, count: 1 }))}>
+          <button className="btn btn-danger" onClick={() => dispatch(addProduct({ id: filteredData[0].id, name: filteredData[0].title }))}>
             주문하기
           </button>
         </div>

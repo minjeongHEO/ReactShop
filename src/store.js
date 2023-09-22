@@ -24,8 +24,21 @@ let cart = createSlice({
       });
     },
     addProduct(state, action) {
-      return [...state, action.payload];
-      // state.put(action.payload);안됌
+      const { id, name } = action.payload;
+
+      // 이미 카트에 있는 제품인지 확인
+      const existingProduct = state.find((product) => product.id === id); //*1)
+
+      if (existingProduct) {
+        // 이미 카트에 있는 제품이면 수량만 증가
+        existingProduct.count += 1;
+      } else {
+        // 카트에 없는 제품이면 새로 추가
+        state.push({ id, name, count: 1 });
+      }
+      alert('주문 완료!');
+
+      //return [...state, action.payload];
     },
   },
 });
@@ -42,3 +55,12 @@ export default configureStore({
 });
 
 export let { addCount, addProduct } = cart.actions;
+
+/* 1) Array.prototype.find() 함수
+      배열에서 주어진 조건을 만족하는 첫 번째 요소를 반환하는 메서드
+      콜백 함수를 사용하여 배열 요소를 순회하면서 조건을 확인하고, 조건을 만족하는 첫 번째 요소를 반환
+      만약 조건을 만족하는 요소를 찾지 못하면 undefined를 반환
+      배열을 순회하면서 조건을 만족하는 첫 번째 요소를 찾으면 검색을 멈추고 해당 요소를 반환
+  1-1) Array.prototype.filter() 함수
+      만약 여러 개의 요소를 찾고자 한다면 filter() 함수를 사용하여 모든 조건을 만족하는 요소를 배열로 얻을 수 있습니다
+ */
