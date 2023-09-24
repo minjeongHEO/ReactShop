@@ -21,13 +21,22 @@ import CartPage from './components/page/CartPage.js';
 export let context1 = createContext(); //context를 만들어줌 = state보관함
 
 function App() {
+  useEffect(() => {
+    localStorage.setItem('history', JSON.stringify([]));
+  }, []);
+
   let [shoes, setShoes] = useState(data);
   let [click, setClick] = useState(2);
   const [loading, setLoading] = useState(false);
-
   const noVisible = {
     visibility: 'hidden',
   };
+
+  // let obj = { name: 'kim' };
+  // localStorage.setItem('data', JSON.stringify(obj));
+  // let getObj = localStorage.getItem('data');
+  // console.log(getObj);
+  // console.log(JSON.parse(getObj));
 
   return (
     <>

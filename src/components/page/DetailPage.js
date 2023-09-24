@@ -56,6 +56,15 @@ const DetailPage = (props) => {
     };
   }, [isVisible]); // *6
 
+  useEffect(() => {
+    let getHistory = JSON.parse(localStorage.getItem('history'));
+    let historySet = new Set(getHistory);
+    historySet.add(id);
+    // Set 객체를 배열로 변환 (안하고 바로 localStorage.setItem 시 에러남 )
+    const historyArray = Array.from(historySet);
+    localStorage.setItem('history', JSON.stringify(historyArray));
+  });
+
   const numberCheck = (e) => {
     let value = e.target.value;
     // *2
