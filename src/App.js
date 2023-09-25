@@ -22,7 +22,10 @@ export let context1 = createContext(); //context를 만들어줌 = state보관�
 
 function App() {
   useEffect(() => {
-    localStorage.setItem('history', JSON.stringify([]));
+    let getObj = localStorage.getItem('history');
+    if (!getObj) {
+      localStorage.setItem('history', JSON.stringify([]));
+    }
   }, []);
 
   let [shoes, setShoes] = useState(data);
@@ -31,12 +34,6 @@ function App() {
   const noVisible = {
     visibility: 'hidden',
   };
-
-  // let obj = { name: 'kim' };
-  // localStorage.setItem('data', JSON.stringify(obj));
-  // let getObj = localStorage.getItem('data');
-  // console.log(getObj);
-  // console.log(JSON.parse(getObj));
 
   return (
     <>
@@ -50,7 +47,8 @@ function App() {
           path="/"
           element={
             <>
-              <Swiper className="main-bg" spaceBetween={10} slidesPerView={1} onSlideChange={() => console.log('slide change')} onSwiper={(swiper) => console.log(swiper)}>
+              {/* <Swiper className="main-bg" spaceBetween={10} slidesPerView={1} onSlideChange={() => console.log('slide change')} onSwiper={(swiper) => console.log(swiper)}> */}
+              <Swiper className="main-bg" spaceBetween={10} slidesPerView={1}>
                 <SwiperSlide>
                   <div className="mainSlide1" style={{ backgroundImage: `url(${mainImg1})` }}></div>
                 </SwiperSlide>

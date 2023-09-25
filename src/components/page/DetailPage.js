@@ -59,7 +59,8 @@ const DetailPage = (props) => {
   useEffect(() => {
     let getHistory = JSON.parse(localStorage.getItem('history'));
     let historySet = new Set(getHistory);
-    historySet.add(id);
+    // historySet.add(id);
+    historySet.add(parseInt(id));
     // Set 객체를 배열로 변환 (안하고 바로 localStorage.setItem 시 에러남 )
     const historyArray = Array.from(historySet);
     localStorage.setItem('history', JSON.stringify(historyArray));
