@@ -1,9 +1,36 @@
 /* eslint-disable */
+import axios from 'axios';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { useQuery } from 'react-query';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 const MainNav = () => {
   let navigate = useNavigate(); //이 Hook을 사용하려면 라우터 컴포넌트 내에서만 호출해야 합니다.
+  /* 1
+  axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+    a.data;
+  });
+  */
+  /* 2
+  useQuery('작명', () => {
+    return axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+      return a.data;
+    })
+  });
+  */
+  let result = useQuery(
+    '작명',
+    () =>
+      axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+        console.log('틈만나면 자동으로 refetch');
+        return a.data;
+      }),
+    { staleTime: 1000 }
+  );
+
+  /**
+   * https://codingapple1.github.io/userdata.json
+   */
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -20,6 +47,13 @@ const MainNav = () => {
         >
           🎂쪼꼬보이 편집숍 👜
         </Navbar.Brand>
+
+        {/* <Nav className="ms-auto">{result.isLoading ? '로딩중' : result.data.name}</Nav> */}
+        <Nav className="ms-auto">
+          {result.isLoading && '로딩중'}
+          {result.error && '에러남'}
+          {result.data && result.data.name}
+        </Nav>
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

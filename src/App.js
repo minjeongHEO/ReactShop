@@ -21,6 +21,16 @@ import CartPage from './components/page/CartPage.js';
 export let context1 = createContext(); //context를 만들어줌 = state보관함
 
 function App() {
+  let [shoes, setShoes] = useState(data);
+  let [click, setClick] = useState(2);
+  const [loading, setLoading] = useState(false);
+  const noVisible = {
+    visibility: 'hidden',
+  };
+
+  const [scrollY, setScrollY] = useState(0);
+  const [quickMenuPosition, setQuickMenuPosition] = useState('top'); // 초기 위치
+
   useEffect(() => {
     let getObj = localStorage.getItem('history');
     if (!getObj) {
@@ -28,11 +38,35 @@ function App() {
     }
   }, []);
 
-  let [shoes, setShoes] = useState(data);
-  let [click, setClick] = useState(2);
-  const [loading, setLoading] = useState(false);
-  const noVisible = {
-    visibility: 'hidden',
+  useEffect(() => {
+    const handleScroll = () => {
+      // 스크롤 위치를 감지해서 위치값 useState에 저장
+      const currentScrollY = window.scrollY;
+      setScrollY(currentScrollY);
+
+      // 스크롤 위치에 따라 퀵 메뉴의 위치 업데이트
+      if (currentScrollY > 100) {
+        setQuickMenuPosition('fixed'); // 스크롤이 일정 위치 이상으로 내려갔을 때 퀵 메뉴를 고정
+      } else {
+        setQuickMenuPosition('top'); // 스크롤이 일정 위치 미만일 때 퀵 메뉴를 원래 위치로
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const doongStyle = {
+    width: '257px',
+    height: '428px',
+    backgroundColor: 'black',
+    color: 'white',
+    zIndex: '50',
+    position: quickMenuPosition,
+    top: '0',
   };
 
   return (
@@ -47,6 +81,7 @@ function App() {
           path="/"
           element={
             <>
+              {/* <div className="doong" style={doongStyle}></div> */}
               {/* <Swiper className="main-bg" spaceBetween={10} slidesPerView={1} onSlideChange={() => console.log('slide change')} onSwiper={(swiper) => console.log(swiper)}> */}
               <Swiper className="main-bg" spaceBetween={10} slidesPerView={1}>
                 <SwiperSlide>
