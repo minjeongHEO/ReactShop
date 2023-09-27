@@ -3,8 +3,23 @@ import { Table } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAge } from '../../store/userSlice.js';
 import { addCount } from '../../store.js';
+import { memo, useMemo, useState } from 'react';
 
+/* 꼭 필요할 때만 재렌더링하는 memo */
+let Child = memo(() => {
+  console.log('Child 재렌더링');
+  return <div>자식임</div>;
+});
 function CartPage() {
+  console.log('----부모 재렌더링----');
+  let [count, setCount] = useState(0);
+
+  let result = useMemo(() => {
+    console.log('usememo');
+    return Child;
+    //return 함수;
+  });
+
   //* useDispatch => store.js에 요청을 보내주는 함수
   let dispatch = useDispatch();
   //* useSelector => store.js에 있던 Redux state를 가져와줌
@@ -20,6 +35,16 @@ function CartPage() {
 
   return (
     <div>
+      <Child count={count} />
+      <button
+        onClick={() => {
+          setCount(count + 1);
+          console.log(result);
+        }}
+      >
+        눌러봐
+      </button>
+
       <h6>
         {reduxState.user.name}({reduxState.user.age})의 장바구니
         <button
