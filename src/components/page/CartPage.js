@@ -16,9 +16,8 @@ function CartPage() {
 
   let result = useMemo(() => {
     console.log('usememo');
-    return Child;
-    //return 함수;
-  });
+    return Child; // 또는 함수;
+  }, []); // 두 번째 인자는 의존성 배열입니다. 필요에 따라 조절할 수 있습니다.
 
   //* useDispatch => store.js에 요청을 보내주는 함수
   let dispatch = useDispatch();
