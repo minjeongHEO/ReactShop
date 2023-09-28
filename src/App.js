@@ -2,7 +2,7 @@
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
-import { createContext, lazy, Suspense, useEffect, useState } from 'react';
+import { createContext, lazy, Suspense, useDeferredValue, useEffect, useState, useTransition } from 'react';
 import axios from 'axios';
 
 import data from './data.js';
@@ -72,13 +72,30 @@ function App() {
     top: '0',
   };
 
+  /********성능개선 테스트********/
+  let testArray = new Array(10000).fill(0);
+  let [testName, setTestName] = useState('');
+  let [isPending, startTransition] = useTransition(); //*1,2)
+  // let [처리여부, 늦게처리] = useTransition();
+
+  let deferredState = useDeferredValue(testName); //*3)
+  /******************************/
+
   return (
     <>
       {/* Route == page */}
       <MainNav />
 
       {/* <Link to="/detail">상세페이지</Link> */}
-
+      <input
+        onChange={(e) => {
+          startTransition(() => {
+            setTestName(e.target.value);
+          });
+        }}
+      ></input>
+      {/* {isPending ? <Loading /> : testArray.map(() => <div>{testName}</div>)} */}
+      {isPending ? <Loading /> : testArray.map(() => <div>{deferredState}</div>)}
       <Suspense fallback={<div>로딩중입니다</div>}>
         <Routes>
           <Route
@@ -163,3 +180,24 @@ function App() {
 }
 
 export default App;
+/**
+ * 1-1) <input>에 'a'를 입력 시 "기존에" 브라우저가 할 일은
+ *     1. 입력한 'a' 를 <input>에 보여주기
+ *     2. <div> * 10000개 만들기
+ * 1-2) startTransition으로 감싸주면 감싼 코드들을 늦게 처리해준다.(코드시작을 뒤로 늦춰줌)
+ *     startTransition는 함수임(문제의 state변경을 감싸주고 콜백함수에 문제의 state를 넣어준다)]
+ *     1. 입력한 'a' 를 <input>에 보여주기
+ *     2. 한가할 때 <div> * 10000개 만들기
+ *
+ * 2)isPending은 startTransition이 처리중일 때 true로 변함
+ *
+ * 3)useDeferredValue(state)
+ *    뭘 감싸고 그러지않고, state나 props를 넣어준다.
+ *    변수로 값을 뱉는다.
+ *    넣은 값에 변동사항이 생기면 늦게 처리해준다.
+ *
+ * - startTransition VS useDeferredValue
+ *  : useTransition은 UI 변경을 부드럽게 처리하고 사용자 경험을 개선하기 위한 것
+ *    useDeferredValue는 특정 값의 업데이트를 지연시켜서 렌더링 성능을 최적화하기 위한 것
+ *
+ */
